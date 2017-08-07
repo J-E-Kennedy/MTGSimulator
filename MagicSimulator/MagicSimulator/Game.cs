@@ -10,6 +10,21 @@ namespace MagicSimulator
     {
         List<Player> Players;
 
+        struct Mulligan
+        {
+            public Player Player;
+            public int Cards;
+            public bool Keep;
+
+            public Mulligan(Player player, int cards, bool keep)
+            {
+                Player = player;
+                Cards = cards;
+                Keep = keep;
+            }
+
+        }
+
         public Game(List<Player> players)
         {
             Players = players;
@@ -17,14 +32,52 @@ namespace MagicSimulator
 
         public void Start()
         {
-            var mulligans = Players.Select(x => (player: x, cards: 7, keep: false));
-            while(mulligans.Any(x => x.keep = false))
+            //to implement decide starting player 
+
+            foreach(var player in Players)
             {
-                foreach(var person in mulligans.Where(x => x.keep == false))
+                player.Draw(7);
+            }
+
+            var mulligans = Players.Select(x => new Mulligan(x, 7, false) ).ToArray();
+            while(mulligans.Any(x => x.Keep = false))
+            {
+                for (int i = 0; i < mulligans.Length; i++)
                 {
-                    
+                    if(!mulligans[i].Keep)
+                    {
+                        switch (Choice("Keep", "Mulligan"))
+                        {
+                            case "Keep":
+                                mulligans[i].Keep = true;
+                                break;
+                        }
+                    }
+
                 }
             }
         }
+
+        //currently for console
+        public string Choice(params string[] choices)
+        {
+            int choice = -1;
+            bool validChoice = false;
+            do
+            {
+                Console.WriteLine("Type the number in front of the choice you want");
+                for (int i = 0; i < choices.Length; i++)
+                {
+                    Console.WriteLine($"{i + 1}: {choices[i]}");
+                }
+                int.TryParse(Console.ReadLine(), out choice);
+                validChoice = choice > 0 && choice <= choices.Length;
+            } while (!validChoice);
+            return choices[choice - 1];
+        }
+
+
+
+
     }
 }
