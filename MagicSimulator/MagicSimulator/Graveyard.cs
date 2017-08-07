@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace MagicSimulator
 {
-    class Program
+    class Graveyard
     {
-        static void Main(string[] args)
-        {
-            var grisly = TestingFactory.CreateGrislyBear();
+        public List<Card> Cards { get; private set; }
 
-            Console.ReadKey();
+        public Graveyard()
+        {
+            Cards = new List<Card>();
         }
     }
 }

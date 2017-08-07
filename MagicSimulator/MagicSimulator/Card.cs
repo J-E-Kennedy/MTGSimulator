@@ -16,6 +16,7 @@ namespace MagicSimulator
         public Color Color { get; }
         public Color Identity { get; }
 
+        public ManaCost Cost { get; }
 
         public Supertype Supertype { get; }
         public CardType CardType { get; }// to be set by child classes
@@ -39,16 +40,17 @@ namespace MagicSimulator
         public string ImageUrl;//how should this be implemented?
 
         public Ruling[] Rulings { get; }
-        
+
         //the following types are available but not implemented
         //id, variations, watermark, border, timeshifted (implemented as a rarity), hand (for vanguard), reserved, releaseDate (for promos), starter 
         //foreignNames, printings, originalText, originalType, legalities, source
 
-        public Card(string name, CardType type, Color color = Color.Colorless, Color identity = Color.Colorless, Supertype supertype = Supertype.None,
+        public Card(string name, CardType type, string cost = "{0}", Color color = Color.Colorless, Color identity = Color.Colorless, Supertype supertype = Supertype.None,
              string[] subtypes = null, string artist = "", string number = "", string text = "", string set = "", Rarity rarity = Rarity.Common, 
              Keyword[] keywords = null, int multiverseId = 0, string imageUrl = "", Ruling[] rulings = null)
         {
             Name = name;
+            Cost = new ManaCost(cost);
             CardType = type;
             Color = color;
             Identity = identity;
