@@ -20,5 +20,16 @@ namespace MagicSimulator
             Cards.Add(card);
         }
 
+        public override string ToString()
+        {
+            string hand = "";
+            foreach(Card c in Cards)
+            {
+                hand += c + "\n";
+            }
+            return hand;
+        }
+        
+
     }
 }

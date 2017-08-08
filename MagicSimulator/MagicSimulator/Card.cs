@@ -67,5 +67,10 @@ namespace MagicSimulator
             Rulings = rulings ?? new Ruling[0];
         }
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
     }
 }

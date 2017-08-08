@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Card.cs" />
+    <Compile Include="Counter.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="Enums.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Keyword.cs" />
     <Compile Include="Land.cs" />
     <Compile Include="ManaCost.cs" />
+    <Compile Include="Permanents.cs" />
     <Compile Include="Permanent.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />

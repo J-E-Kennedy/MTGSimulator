@@ -14,6 +14,7 @@ namespace MagicSimulator
         Random Random;
         public Deck(List<Card> cards, Random random = null)
         {
+            Cards = new Stack<Card>();
             Random = random ?? new Random();
             while(cards.Count > 0)
             {

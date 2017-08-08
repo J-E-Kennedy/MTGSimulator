@@ -56,7 +56,25 @@ namespace MagicSimulator
 
                 }
             }
+            Play();
         }
+
+        public void Play()
+        {
+            while(Players.Count(x => x.Alive) > 1)
+            {
+                foreach(Player player in Players)
+                {
+                    if(player.Alive)
+                    {
+                        PlayerActions(player);
+                        player.BeginningPhase();
+                    }
+                }
+            }
+        }
+
+
 
         //currently for console
         public string Choice(params string[] choices)
@@ -74,6 +92,21 @@ namespace MagicSimulator
                 validChoice = choice > 0 && choice <= choices.Length;
             } while (!validChoice);
             return choices[choice - 1];
+        }
+
+        public void PlayerActions(Player activePlayer)
+        {
+            Console.WriteLine("What do you want to do?");
+            string response = Console.ReadLine();
+            switch (response)
+            {
+                case "hand":
+                    Console.WriteLine(activePlayer.ShowHand());
+                    break;
+            }
+            Console.ReadKey();
+
+
         }
 
 

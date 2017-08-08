@@ -10,7 +10,14 @@ namespace MagicSimulator
     {
         static void Main(string[] args)
         {
-            var grisly = TestingFactory.CreateGrislyBear();
+            Game testGame = new Game(
+                new List<Player>()
+                {
+                    new Player("Jon", TestingFactory.GrizzlyDeck()),
+                    new Player("Isaac", TestingFactory.GrizzlyDeck())
+                }
+                );
+            testGame.Start();
 
             Console.ReadKey();
         }
