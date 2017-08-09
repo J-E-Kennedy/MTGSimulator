@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MagicSimulator
 {
-    class Ruling
+    public class Ruling
     {
         public DateTime Date { get; }
         public string Text { get; }

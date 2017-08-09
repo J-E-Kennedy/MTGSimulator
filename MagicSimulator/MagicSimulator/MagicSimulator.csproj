@@ -49,8 +49,11 @@
     <Compile Include="Counter.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="Deck.cs" />
+    <Compile Include="Effect.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="ITargetable.cs" />
+    <Compile Include="TheStack.cs" />
     <Compile Include="Graveyard.cs" />
     <Compile Include="Hand.cs" />
     <Compile Include="Keyword.cs" />

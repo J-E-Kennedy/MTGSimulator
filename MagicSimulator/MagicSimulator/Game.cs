@@ -3,12 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MagicSimulator.Enums;
 
 namespace MagicSimulator
 {
-    class Game
+    public class Game
     {
         List<Player> Players;
+        Player activePlayer;
+        Player currentTurnPlayer;
+        Phase currentPhase;
+
+        List<Phase> turnStructure = new List<Phase>()
+        {
+            Phase.Untap,
+            Phase.Upkeep,
+            Phase.PreCombatMain,
+            Phase.BeginningCombat,
+            Phase.Attackers,
+            Phase.Blockers,
+            Phase.Damage,
+            Phase.EndingCombat,
+            Phase.PostCombatMain,
+            Phase.End,
+            Phase.Cleanup
+        };
 
         struct Mulligan
         {
@@ -33,7 +52,7 @@ namespace MagicSimulator
         public void Start()
         {
             //to implement decide starting player 
-
+            
             foreach(var player in Players)
             {
                 player.Draw(7);
@@ -56,6 +75,7 @@ namespace MagicSimulator
 
                 }
             }
+            currentPhase = Phase.Untap;
             Play();
         }
 
@@ -67,7 +87,55 @@ namespace MagicSimulator
                 {
                     if(player.Alive)
                     {
-                        PlayerActions(player);
+                        currentTurnPlayer = player;
+                        activePlayer = player;
+                        var priority = priorityOrder(activePlayer);
+                        foreach(Phase phase in turnStructure)
+                        {
+                            currentPhase = phase;
+                            switch (phase)
+                            {
+                                case Phase.Untap:
+                                    currentTurnPlayer.UntapStep();
+                                    break;
+                                case Phase.Upkeep:
+                                    currentTurnPlayer.UpkeepStep();
+                                    CyclePriority(currentTurnPlayer);
+                                    break;
+                                case Phase.PreCombatMain:
+                                    currentTurnPlayer.PrecombatMainPhase();
+                                    CyclePriority(currentTurnPlayer);
+                                    break;
+                                case Phase.BeginningCombat:
+                                    CyclePriority(currentTurnPlayer);
+                                    break;
+                                case Phase.Attackers:
+                                    CyclePriority(currentTurnPlayer);
+                                    break;
+                                case Phase.Blockers:
+                                    CyclePriority(currentTurnPlayer);
+                                    break;
+                                case Phase.Damage:
+                                    CyclePriority(currentTurnPlayer);
+                                    break;
+                                case Phase.EndingCombat:
+                                    CyclePriority(currentTurnPlayer);
+                                    break;
+                                case Phase.PostCombatMain:
+                                    CyclePriority(currentTurnPlayer);
+                                    break;
+                                case Phase.End:
+                                    CyclePriority(currentTurnPlayer);
+                                    break;
+                                case Phase.Cleanup:
+                                    break;
+                            }
+
+                        }
+
+
+
+                        //PlayerActions(player);
                         player.BeginningPhase();
                     }
                 }
@@ -96,21 +164,86 @@ namespace MagicSimulator
 
         public void PlayerActions(Player activePlayer)
         {
-            Console.WriteLine("What do you want to do?");
+            Console.WriteLine($"{activePlayer.Name}, what do you want to do? (Phase: {currentTurnPlayer.Name}'s {currentPhase})");
             string response = Console.ReadLine();
             switch (response)
             {
                 case "hand":
                     Console.WriteLine(activePlayer.ShowHand());
+                    PlayerActions(activePlayer);
+                    break;
+                case "board":
+                    Console.WriteLine(ShowAllPermanents());
+                    PlayerActions(activePlayer);
+                    break;
+                case "deck":
+                    Console.WriteLine(activePlayer.CheckDeck());
+                    PlayerActions(activePlayer);
+                    break;
+                case "play":
+                    //Console.WriteLine(activePlayer.ShowCastable(currentTurnPlayer, currentPhase));
+                    var castable = activePlayer.GetPlayable(currentTurnPlayer, currentPhase);
+                    if(castable.Count == 0)
+                    {
+                        Console.WriteLine("You have nothing to play!");
+                    }
+                    else
+                    {
+                        string backChoice = "wait go back please";
+                        var choice = Choice(castable.Select(x => x.ToString()).Concat( new string[] { backChoice }).ToArray());
+                        if(choice == backChoice)
+                        {
+                            PlayerActions(activePlayer);
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    break;
+                case "pass":
+                    break;
+                default:
+                    Console.WriteLine("I don't understand");
+                    PlayerActions(activePlayer);
                     break;
             }
-            Console.ReadKey();
+            //Console.ReadKey();
 
+        }
 
+        public string ShowAllPermanents()
+        {
+            StringBuilder permanents = new StringBuilder();
+            foreach(var player in Players)
+            {
+                permanents.Append($"{player.Name} controls:\n");
+                permanents.Append(player.ShowPermanents());
+            }
+            return permanents.ToString();
+        }
+
+        List<Player> priorityOrder(Player active)
+        {
+            List<Player> players = new List<Player>();
+            int indexOfCurrent = Players.IndexOf(active);
+            var playersBefore = Players.Take(indexOfCurrent);
+            var playersAfter = Players.Skip(indexOfCurrent + 1);
+            players.Add(currentTurnPlayer);
+            players.AddRange(playersAfter);
+            players.AddRange(playersBefore);
+            return players;
         }
 
 
 
+        void CyclePriority(Player active)
+        {
+            foreach(Player player in priorityOrder(active))
+            {
+                PlayerActions(player);
+            }
+        }
 
     }
 }

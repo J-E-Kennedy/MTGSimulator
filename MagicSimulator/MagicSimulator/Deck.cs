@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace MagicSimulator
 {
-    class Deck
+    public class Deck
     {
         public bool IsEmpty => Cards.Count == 0;
 
         Stack<Card> Cards;
         Random Random;
+        
         public Deck(List<Card> cards, Random random = null)
         {
             Cards = new Stack<Card>();
@@ -41,6 +42,11 @@ namespace MagicSimulator
         public void Mulligan()
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return $"There are {Cards.Count} cards left.";
         }
 
     }

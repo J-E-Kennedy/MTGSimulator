@@ -7,7 +7,7 @@ using static MagicSimulator.Enums;
 
 namespace MagicSimulator
 {
-    class Land : Permanent
+    public class Land : Permanent
     {
         public Color Produces { get; }
 

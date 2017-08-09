@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MagicSimulator
 {
-    class Permanents
+    public class Permanents
     {
         List<Permanent> ControlledPermanents;
 
@@ -21,6 +21,21 @@ namespace MagicSimulator
             {
                 permanent.Untap();
             }
+        }
+
+        public override string ToString()
+        {
+            string permanents = "";
+            foreach(var permanent in ControlledPermanents)
+            {
+                permanents += permanent.ToString() + "\n";
+            }
+            return permanents;
+        }
+
+        public void Add(Permanent permanent)
+        {
+            ControlledPermanents.Add(permanent);
         }
 
     }

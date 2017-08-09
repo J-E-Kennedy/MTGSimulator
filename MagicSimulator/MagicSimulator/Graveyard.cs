@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MagicSimulator
 {
-    class Graveyard
+    public class Graveyard
     {
         public List<Card> Cards { get; private set; }
 

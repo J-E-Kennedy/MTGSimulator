@@ -7,7 +7,7 @@ using static MagicSimulator.Enums;
 
 namespace MagicSimulator
 {
-    abstract class Card
+    public abstract class Card : ITargetable
     {
         public string Name { get; }
         //for flip cards?
@@ -70,6 +70,11 @@ namespace MagicSimulator
         public override string ToString()
         {
             return Name;
+        }
+
+        public bool Is(CardType type)
+        {
+            return (CardType & type) != 0;
         }
 
     }

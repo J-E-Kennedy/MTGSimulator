@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MagicSimulator
 {
-    static class Enums
+    public static class Enums
     {
         [Flags]
         public enum Color
@@ -62,7 +62,27 @@ namespace MagicSimulator
             Special
         }
 
-
+        public enum Phase
+        {
+            //Beginning Phase
+            Untap,
+            Upkeep,
+            Draw,
+            //Main 1
+            PreCombatMain,
+            //Combat Phase
+            BeginningCombat,
+            Attackers,
+            Blockers,
+            Damage,
+            EndingCombat,
+            //Main 2
+            PostCombatMain,
+            //End Phase
+            End,
+            Cleanup
+        }
+        
 
 
     }

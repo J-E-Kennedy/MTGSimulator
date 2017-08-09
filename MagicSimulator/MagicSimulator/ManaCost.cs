@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MagicSimulator
 {
-    class ManaCost
+    public class ManaCost
     {
         int Generic;
         int White;

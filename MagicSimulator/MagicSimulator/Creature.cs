@@ -7,7 +7,7 @@ using static MagicSimulator.Enums;
 
 namespace MagicSimulator
 {
-    class Creature : Permanent
+    public class Creature : Permanent
     {
         public int Power { get; }
         public int Toughness { get; }

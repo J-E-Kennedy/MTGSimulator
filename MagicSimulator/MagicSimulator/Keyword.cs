@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MagicSimulator
 {
-    class Keyword
+    public class Keyword
     {
         string keyword;
         //maybe a factory to make an keyword effect from a string

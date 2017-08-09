@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace MagicSimulator
 {
-    public class Counter
+    public interface ITargetable
     {
-        string CounterType;
-        public Counter(string type)
-        {
-            CounterType = type;
-        }
     }
 }

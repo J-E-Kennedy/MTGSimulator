@@ -7,7 +7,7 @@ using static MagicSimulator.Enums;
 
 namespace MagicSimulator
 {
-    abstract class Permanent : Card
+    public abstract class Permanent : Card
     {
         //tapped , counters, etc
         public bool Tapped { get; private set; }
