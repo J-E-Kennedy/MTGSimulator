@@ -16,10 +16,12 @@ namespace MagicSimulator
         int Green;
         int Colorless;
 
+        int[] Costs => new int[] { Generic, White, Blue, Black, Red, Green, Colorless };
+
         public ManaCost(string cost)
         {
             var symbols = cost.Split('}').Select(x => x.TrimStart('{')).Where(x => x != "").ToList();
-            foreach(var symbol in symbols)
+            foreach (var symbol in symbols)
             {
                 switch (symbol)
                 {
@@ -68,5 +70,17 @@ namespace MagicSimulator
             Colorless = colorless;
         }
 
+        public override string ToString()
+        {
+
+            for (int i = 0; i < Costs.Length; i++)
+            {
+                if (i == 0)
+                {
+
+                }
+            }
+            return null;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+        }
     }
 }

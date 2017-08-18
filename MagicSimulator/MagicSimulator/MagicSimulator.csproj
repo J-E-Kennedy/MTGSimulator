@@ -45,9 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Card.cs" />
-    <Compile Include="Counter.cs" />
-    <Compile Include="Creature.cs" />
+    <Compile Include="CardComponents\Card.cs" />
+    <Compile Include="CardComponents\Counter.cs" />
+    <Compile Include="CardComponents\Creature.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="Effect.cs" />
     <Compile Include="Enums.cs" />
@@ -56,15 +56,15 @@
     <Compile Include="TheStack.cs" />
     <Compile Include="Graveyard.cs" />
     <Compile Include="Hand.cs" />
-    <Compile Include="Keyword.cs" />
-    <Compile Include="Land.cs" />
-    <Compile Include="ManaCost.cs" />
+    <Compile Include="CardComponents\Keyword.cs" />
+    <Compile Include="CardComponents\Land.cs" />
+    <Compile Include="CardComponents\ManaCost.cs" />
     <Compile Include="Permanents.cs" />
     <Compile Include="Permanent.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Ruling.cs" />
+    <Compile Include="CardComponents\Ruling.cs" />
     <Compile Include="TestingFactory.cs" />
   </ItemGroup>
   <ItemGroup>

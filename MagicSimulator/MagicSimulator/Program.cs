@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace MagicSimulator
     {
         static void Main(string[] args)
         {
+            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
             Game testGame = new Game(
                 new List<Player>()
                 {

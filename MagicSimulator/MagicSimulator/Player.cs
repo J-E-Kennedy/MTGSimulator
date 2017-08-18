@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,12 +12,13 @@ namespace MagicSimulator
     {
         int Life;
         Deck Deck;
-        Hand Hand;
+        public Hand Hand { get; }
         Graveyard Graveyard;
         Permanents Permanents;
         public bool HasPlayedLand;
         public string Name { get; }
         public bool Alive { get; }
+        public List<Creature> Attackers { get; private set; }
 
         public Player(string name, Deck deck, int life = 20)
         {
@@ -26,6 +28,7 @@ namespace MagicSimulator
             Hand = new Hand(this);
             Graveyard = new Graveyard();
             Permanents = new Permanents();
+            Attackers = new List<Creature>();
             HasPlayedLand = false;
             Alive = true;
         }
@@ -80,7 +83,7 @@ namespace MagicSimulator
 
         public void CombatPhase()
         {
-
+            Attackers = new List<Creature>();
         }
 
         public void PostcombatMainPhase()
@@ -91,6 +94,11 @@ namespace MagicSimulator
         public void EndingPhase()
         {
 
+        }
+
+        public void CleanupStep()
+        {
+            HasPlayedLand = false;
         }
 
         public string CheckDeck()
@@ -130,17 +138,37 @@ namespace MagicSimulator
             }
             if (toPlay.Is(CardType.Land))
             {
-                Permanents.Add(toPlay as Permanent);
+                if(!HasPlayedLand)
+                {
+                    HasPlayedLand = true;
+                    Debug.WriteLine($"{Name} plays an {toPlay.Name}");
+                    Hand.Remove(toPlay);
+                    Permanents.Add(toPlay as Permanent);
+                }
             }
             else
             {
+                Debug.WriteLine ($"{Name} casts an {toPlay.Name}");
                 Cast(toPlay);
             }
         }
 
         public void Cast(Card card)
         {
-        
+            //To implement: Choose targets here
+            Hand.Remove(card);
+            TheStack.Add(this, card);
+        }
+
+        public void AddPermanent(Permanent card)
+        {
+            Permanents.Add(card);
+        }
+
+        public void PayCosts(Card card)
+        {
+            var cost = card.Cost;
+            while(cost > 0)
         }
 
     }

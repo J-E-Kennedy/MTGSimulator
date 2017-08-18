@@ -23,6 +23,11 @@ namespace MagicSimulator
             Cards.Add(card);
         }
 
+        public void Remove(Card card)
+        {
+            Cards.Remove(card);
+        }
+
         public override string ToString()
         {
             StringBuilder hand = new StringBuilder();

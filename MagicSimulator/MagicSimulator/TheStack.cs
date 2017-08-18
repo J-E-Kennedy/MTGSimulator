@@ -22,8 +22,17 @@ namespace MagicSimulator
 
         public static void Add(Player controller, Card card, List<ITargetable> targets = null)
         {
-            var effect = new Effect(card, targets);
+            var effect = new Effect(controller, card, targets);
             GameStack.Push(effect);
+        }
+
+        public static void Resolve()
+        {
+            if(!IsEmpty)
+            {
+                var currentEffect = GameStack.Pop();
+                currentEffect.Resolve();
+            }
         }
             
     }

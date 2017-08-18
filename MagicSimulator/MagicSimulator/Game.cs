@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,13 @@ namespace MagicSimulator
 {
     public class Game
     {
+        static bool debugMode = true;
+        
         List<Player> Players;
         Player activePlayer;
         Player currentTurnPlayer;
         Phase currentPhase;
+        bool turnOneSingleplayer;
 
         List<Phase> turnStructure = new List<Phase>()
         {
@@ -47,23 +51,25 @@ namespace MagicSimulator
         public Game(List<Player> players)
         {
             Players = players;
+
+            turnOneSingleplayer = players.Count < 3;
         }
 
         public void Start()
         {
             //to implement decide starting player 
-            
-            foreach(var player in Players)
+
+            foreach (var player in Players)
             {
                 player.Draw(7);
             }
 
-            var mulligans = Players.Select(x => new Mulligan(x, 7, false) ).ToArray();
-            while(mulligans.Any(x => x.Keep = false))
+            var mulligans = Players.Select(x => new Mulligan(x, 7, false)).ToArray();
+            while (mulligans.Any(x => x.Keep = false))
             {
                 for (int i = 0; i < mulligans.Length; i++)
                 {
-                    if(!mulligans[i].Keep)
+                    if (!mulligans[i].Keep)
                     {
                         switch (Choice("Keep", "Mulligan"))
                         {
@@ -81,16 +87,16 @@ namespace MagicSimulator
 
         public void Play()
         {
-            while(Players.Count(x => x.Alive) > 1)
+            while (Players.Count(x => x.Alive) > 1)
             {
-                foreach(Player player in Players)
+                foreach (Player player in Players)
                 {
-                    if(player.Alive)
+                    if (player.Alive)
                     {
                         currentTurnPlayer = player;
                         activePlayer = player;
-                        var priority = priorityOrder(activePlayer);
-                        foreach(Phase phase in turnStructure)
+                        var priority = PriorityOrder(activePlayer);
+                        foreach (Phase phase in turnStructure)
                         {
                             currentPhase = phase;
                             switch (phase)
@@ -102,24 +108,47 @@ namespace MagicSimulator
                                     currentTurnPlayer.UpkeepStep();
                                     CyclePriority(currentTurnPlayer);
                                     break;
+                                case Phase.Draw:
+                                    if(turnOneSingleplayer)
+                                    {
+                                        turnOneSingleplayer = false;
+                                    }
+                                    else
+                                    {
+                                        currentTurnPlayer.Draw();
+                                    }
+                                    break;
                                 case Phase.PreCombatMain:
                                     currentTurnPlayer.PrecombatMainPhase();
                                     CyclePriority(currentTurnPlayer);
                                     break;
                                 case Phase.BeginningCombat:
+                                    currentTurnPlayer.BeginningPhase();
                                     CyclePriority(currentTurnPlayer);
                                     break;
                                 case Phase.Attackers:
-                                    CyclePriority(currentTurnPlayer);
+                                    if(currentTurnPlayer.Attackers.Count > 0)
+                                    {
+                                        CyclePriority(currentTurnPlayer);
+                                    }
                                     break;
                                 case Phase.Blockers:
-                                    CyclePriority(currentTurnPlayer);
+                                    if (currentTurnPlayer.Attackers.Count > 0)
+                                    {
+                                        CyclePriority(currentTurnPlayer);
+                                    }
                                     break;
                                 case Phase.Damage:
-                                    CyclePriority(currentTurnPlayer);
+                                    if (currentTurnPlayer.Attackers.Count > 0)
+                                    {
+                                        CyclePriority(currentTurnPlayer);
+                                    }
                                     break;
                                 case Phase.EndingCombat:
-                                    CyclePriority(currentTurnPlayer);
+                                    if (currentTurnPlayer.Attackers.Count > 0)
+                                    {
+                                        CyclePriority(currentTurnPlayer);
+                                    }
                                     break;
                                 case Phase.PostCombatMain:
                                     CyclePriority(currentTurnPlayer);
@@ -128,6 +157,7 @@ namespace MagicSimulator
                                     CyclePriority(currentTurnPlayer);
                                     break;
                                 case Phase.Cleanup:
+                                    currentTurnPlayer.CleanupStep();
                                     break;
                             }
 
@@ -164,6 +194,14 @@ namespace MagicSimulator
 
         public void PlayerActions(Player activePlayer)
         {
+            if(debugMode)
+            {
+                if(activePlayer.Name == "Isaac")
+                {
+                    return;
+                }
+            }
+
             Console.WriteLine($"{activePlayer.Name}, what do you want to do? (Phase: {currentTurnPlayer.Name}'s {currentPhase})");
             string response = Console.ReadLine();
             switch (response)
@@ -180,12 +218,15 @@ namespace MagicSimulator
                     Console.WriteLine(activePlayer.CheckDeck());
                     PlayerActions(activePlayer);
                     break;
+                case "cast":
+                    goto case "play";
                 case "play":
                     //Console.WriteLine(activePlayer.ShowCastable(currentTurnPlayer, currentPhase));
                     var castable = activePlayer.GetPlayable(currentTurnPlayer, currentPhase);
                     if(castable.Count == 0)
                     {
                         Console.WriteLine("You have nothing to play!");
+                        PlayerActions(activePlayer);
                     }
                     else
                     {
@@ -197,9 +238,12 @@ namespace MagicSimulator
                         }
                         else
                         {
-
+                            activePlayer.Play(choice);
+                            PlayerActions(activePlayer);
                         }
                     }
+                    break;
+                case "skip":
                     break;
                 case "pass":
                     break;
@@ -223,7 +267,7 @@ namespace MagicSimulator
             return permanents.ToString();
         }
 
-        List<Player> priorityOrder(Player active)
+        List<Player> PriorityOrder(Player active)
         {
             List<Player> players = new List<Player>();
             int indexOfCurrent = Players.IndexOf(active);
@@ -239,11 +283,13 @@ namespace MagicSimulator
 
         void CyclePriority(Player active)
         {
-            foreach(Player player in priorityOrder(active))
+            foreach(Player player in PriorityOrder(active))
             {
                 PlayerActions(player);
             }
         }
+
+        
 
     }
 }

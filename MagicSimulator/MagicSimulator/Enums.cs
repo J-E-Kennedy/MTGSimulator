@@ -39,17 +39,18 @@ namespace MagicSimulator
         [Flags]
         public enum CardType// the name Type creates ambiguity with System.Type
         {
-            Land = 1,
-            Creature = 2,
-            Artifact = 4,
-            Instant = 8,
-            Sorcery = 16,
-            Enchantment = 32,
-            Planeswalker = 64,
-            Tribal = 128,
-            Phenomenon = 256, // planechase
-            Vanguard = 512, // vanguard
-            Scheme = 1024, // Archenemy
+            Permanent = 1,
+            Land = 2 + Permanent,
+            Creature = 4 + Permanent,
+            Artifact = 8 + Permanent,
+            Instant = 16,
+            Sorcery = 32,
+            Enchantment = 64 + Permanent,
+            Planeswalker = 128 + Permanent,
+            Tribal = 256,
+            Phenomenon = 512, // planechase
+            Vanguard = 1024, // vanguard
+            Scheme = 2048, // Archenemy
         }
 
         public enum Rarity
